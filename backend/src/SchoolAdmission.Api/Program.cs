@@ -1,0 +1,37 @@
+using Microsoft.EntityFrameworkCore;
+using SchoolAdmission.Api.Data;
+
+var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException(
+        "Set the ConnectionStrings__DefaultConnection environment variable.");
+
+var frontendOrigin = builder.Configuration["FRONTEND_ORIGIN"] ?? "http://localhost:5173";
+
+builder.Services.AddControllers();
+builder.Services.AddOpenApi();
+builder.Services.AddDbContext<AdmissionDbContext>(options =>
+    options.UseNpgsql(connectionString));
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+        policy.WithOrigins(frontendOrigin)
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+}
+
+app.UseCors();
+app.MapControllers();
+app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
+
+app.Run();
+
+public partial class Program;

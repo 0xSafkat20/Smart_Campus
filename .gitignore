@@ -1,0 +1,13 @@
+.env
+.idea/
+.vscode/
+*.user
+*.suo
+
+**/bin/
+**/obj/
+frontend/node_modules/
+frontend/dist/
+
+tmp/
+Asst_Software_Engineer_Project_Assignment*.pdf
