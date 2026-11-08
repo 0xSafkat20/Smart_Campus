@@ -10,3 +10,5 @@ This file records choices that the assignment leaves open. Update it whenever a 
 - Admission fee payment will be simulated as immediately successful. No real payment gateway will be added.
 - PostgreSQL IDs will use UUIDs. The example prefixes in the brief are illustrative and the brief allows another ID format.
 - PostgreSQL will be the source of truth for capacity and concurrency. In-memory locks will not be relied upon, so a later multi-process backend remains possible.
+- Dates and expiration timestamps will be stored as UTC `timestamp with time zone` values in PostgreSQL.
+- Seat totals will be calculated from hold records instead of being stored as mutable counters. This avoids duplicated state that could drift out of sync.

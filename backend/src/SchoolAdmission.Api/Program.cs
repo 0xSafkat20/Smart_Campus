@@ -23,6 +23,13 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+if (!app.Environment.IsEnvironment("Testing"))
+{
+    await using var scope = app.Services.CreateAsyncScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<AdmissionDbContext>();
+    await dbContext.Database.MigrateAsync();
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

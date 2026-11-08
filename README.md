@@ -1,6 +1,8 @@
 # School Admission System
 
-Starter scaffold for the take-home assignment. The repository is intentionally at the setup stage: the required runtime, folders, configuration, and dependency boundaries are present, but the admission workflow is not implemented yet.
+Incremental implementation of the take-home assignment. The runtime scaffold and database foundation are complete, but the required admission API and UI workflows are not implemented yet.
+
+Development progress and the required implementation order are tracked in [`PROJECT_PLAN.md`](PROJECT_PLAN.md).
 
 ## Required stack
 
@@ -41,6 +43,7 @@ Local tools are optional because Docker is the supported project entry point.
 Backend:
 
 ```text
+dotnet tool restore
 dotnet restore backend/SchoolAdmission.slnx
 dotnet run --project backend/src/SchoolAdmission.Api
 ```
@@ -68,6 +71,14 @@ Copy `.env.example` to `.env` only when overriding the safe local defaults. Impo
 - `HOLD_DURATION_SECONDS`: hold lifetime; the required default is 600 seconds.
 - `VITE_API_BASE_URL`: browser-visible backend URL; defaults to `http://localhost:8080`.
 - `FRONTEND_ORIGIN`: allowed frontend origin for CORS.
+
+Entity Framework migrations are stored in `backend/src/SchoolAdmission.Api/Data/Migrations`. The backend applies pending migrations automatically when it starts outside the test environment.
+
+To create a later migration after changing the model:
+
+```text
+dotnet tool run dotnet-ef migrations add MigrationName --project backend/src/SchoolAdmission.Api --startup-project backend/src/SchoolAdmission.Api --output-dir Data/Migrations
+```
 
 Never commit `.env` or the confidential assignment PDF.
 

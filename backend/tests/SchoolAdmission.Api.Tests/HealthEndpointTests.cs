@@ -1,4 +1,5 @@
 using System.Net;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace SchoolAdmission.Api.Tests;
@@ -10,7 +11,9 @@ public sealed class HealthEndpointTests
 
     public HealthEndpointTests(WebApplicationFactory<Program> factory)
     {
-        _client = factory.CreateClient();
+        _client = factory
+            .WithWebHostBuilder(builder => builder.UseEnvironment("Testing"))
+            .CreateClient();
     }
 
     [Fact]
