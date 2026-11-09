@@ -16,3 +16,5 @@ This file records choices that the assignment leaves open. Update it whenever a 
 - Hold confirmation and cancellation lock the selected hold row so repeated or concurrent actions remain idempotent.
 - Requests for another student's hold return `404` so one student cannot discover another student's application.
 - Cancellation is allowed for both held and confirmed applications and releases the seat; repeating cancellation still returns `204`.
+- The 17-digit student number is stored in browser local storage because the assignment explicitly excludes login and requires the student's applications to remain visible after reopening the browser.
+- The frontend uses plain React components and CSS variables instead of a UI library so the interface remains simple to understand and change.
