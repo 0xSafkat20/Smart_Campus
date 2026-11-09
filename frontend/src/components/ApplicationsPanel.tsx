@@ -23,8 +23,21 @@ function getErrorMessage(error: unknown) {
     : 'Something went wrong. Please try again.'
 }
 
+function getStatusLabel(status: HoldStatus) {
+  return {
+    HELD: 'Reserved',
+    CONFIRMED: 'Admitted',
+    EXPIRED: 'Expired',
+    CANCELLED: 'Cancelled',
+  }[status]
+}
+
 function ApplicationStatus({ status }: { status: HoldStatus }) {
-  return <span className={`application-status ${status.toLowerCase()}`}>{status}</span>
+  return (
+    <span className={`application-status ${status.toLowerCase()}`}>
+      {getStatusLabel(status)}
+    </span>
+  )
 }
 
 export function ApplicationsPanel({
@@ -110,7 +123,7 @@ export function ApplicationsPanel({
       .getMyHolds()
       .then((nextApplications) => {
         setApplications(nextApplications)
-        setNotice('A seat hold expired. The seat is available again.')
+        setNotice('A reservation expired. The seat is open again.')
         onApplicationChanged()
       })
       .catch((error: unknown) => setActionError(getErrorMessage(error)))
@@ -118,7 +131,7 @@ export function ApplicationsPanel({
 
   async function handleConfirm(application: MyHoldResponse) {
     if (remainingSeconds(application, Date.now()) === 0) {
-      setActionError('This hold has expired and cannot be confirmed.')
+      setActionError('This reservation has expired and cannot be confirmed.')
       return
     }
 
@@ -174,9 +187,8 @@ export function ApplicationsPanel({
     <section className="applications-section" aria-labelledby="applications-title">
       <div className="section-heading">
         <div>
-          <p className="card-kicker">Your admission activity</p>
-          <h2 id="applications-title">My applications</h2>
-          <p>Track your current hold, confirm the admission fee, or cancel.</p>
+          <h2 id="applications-title">Application status</h2>
+          <p>View your reservation, fee status, and application history.</p>
         </div>
         <button
           className="secondary-button"
@@ -184,7 +196,7 @@ export function ApplicationsPanel({
           onClick={() => void loadApplications()}
           disabled={isLoading}
         >
-          Refresh applications
+          Refresh
         </button>
       </div>
 
@@ -208,27 +220,29 @@ export function ApplicationsPanel({
       {!isLoading && !loadError && applications.length === 0 ? (
         <div className="catalog-empty">
           <h3>No applications yet</h3>
-          <p>Choose an available class above and hold a seat to get started.</p>
+          <p>Choose an admission class above and reserve a seat to get started.</p>
         </div>
       ) : null}
 
       {currentApplication ? (
         <article className="current-application">
           <div>
-            <p className="current-label">Current application</p>
+            <p className="current-label">
+              {currentStatus === 'HELD' ? 'Active reservation' : 'Latest application'}
+            </p>
             <h3>{currentApplication.className}</h3>
             <p>{statusText(currentStatus ?? currentApplication.status)}</p>
           </div>
           <div className="countdown-block" aria-live="polite">
             <span>
               {currentStatus === 'HELD' || currentStatus === 'EXPIRED'
-                ? 'Time remaining'
+                ? 'Reservation expires in'
                 : 'Application status'}
             </span>
             <strong>
               {currentStatus === 'HELD' || currentStatus === 'EXPIRED'
                 ? formatCountdown(remainingSeconds(currentApplication, now))
-                : currentStatus}
+                : getStatusLabel(currentStatus ?? currentApplication.status)}
             </strong>
           </div>
           <div className="current-actions">
@@ -246,10 +260,10 @@ export function ApplicationsPanel({
                 : currentStatus === 'EXPIRED'
                   ? 'Confirmation disabled'
                   : currentStatus === 'CONFIRMED'
-                    ? 'Admission confirmed'
+                    ? 'Admission completed'
                     : currentStatus === 'CANCELLED'
                       ? 'Application closed'
-                      : 'Confirm admission fee'}
+                      : 'Confirm fee payment'}
             </button>
             {currentCanCancel ? (
               <button
@@ -266,9 +280,9 @@ export function ApplicationsPanel({
       ) : null}
 
       {applications.length > 0 ? (
-        <div className="application-list" aria-label="All applications">
+        <div className="application-list" aria-label="Application history">
           <div className="application-list-heading">
-            <h3>All applications</h3>
+            <h3>Application history</h3>
             <span>{applications.length} total</span>
           </div>
           {applications.map((application) => {

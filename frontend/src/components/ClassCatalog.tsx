@@ -28,15 +28,6 @@ function getErrorMessage(error: unknown) {
     : 'Something went wrong. Please try again.'
 }
 
-function SeatMetric({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="seat-metric">
-      <span>{label}</span>
-      <strong>{value}</strong>
-    </div>
-  )
-}
-
 export function ClassCatalog({
   mode,
   studentId,
@@ -173,7 +164,7 @@ export function ClassCatalog({
       const hold = await api.createHold(admissionClass.id)
       setAppliedClassIds((current) => new Set(current).add(admissionClass.id))
       setNotice(
-        `Seat held for ${admissionClass.name} until ${new Date(
+        `Seat reserved for ${admissionClass.name} until ${new Date(
           hold.expiresAt,
         ).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}.`,
       )
@@ -192,39 +183,37 @@ export function ClassCatalog({
         <section className="class-admin-card" aria-labelledby="create-class-title">
           <div className="section-heading compact">
             <div>
-              <p className="card-kicker">Admin tool</p>
-              <h2 id="create-class-title">Create a class</h2>
+              <h2 id="create-class-title">Add admission class</h2>
             </div>
-            <span className="section-step">1</span>
           </div>
 
           <form className="class-form" onSubmit={handleCreateClass} noValidate>
             <label>
-              <span>Class name</span>
+              <span>Class &amp; shift</span>
               <input
                 name="className"
                 maxLength={200}
-                placeholder="Example: Class 1"
+                placeholder="Class 6 - Morning Shift"
                 value={className}
                 onChange={(event) => setClassName(event.target.value)}
                 disabled={isCreating}
               />
             </label>
             <label>
-              <span>Total seats</span>
+              <span>Seat capacity</span>
               <input
                 name="totalSeats"
                 type="number"
                 min="1"
                 step="1"
-                placeholder="Example: 30"
+                placeholder="Example: 120"
                 value={totalSeats}
                 onChange={(event) => setTotalSeats(event.target.value)}
                 disabled={isCreating}
               />
             </label>
             <button className="primary-button class-submit" type="submit" disabled={isCreating}>
-              {isCreating ? 'Creating class…' : 'Create class'}
+              {isCreating ? 'Adding class…' : 'Add class'}
             </button>
           </form>
           {formError ? <p className="inline-error" role="alert">{formError}</p> : null}
@@ -234,16 +223,13 @@ export function ClassCatalog({
       <section className="class-list-section" aria-labelledby="class-list-title">
         <div className="section-heading">
           <div>
-            <p className="card-kicker">
-              {mode === 'admin' ? 'Live availability' : 'Open for application'}
-            </p>
             <h2 id="class-list-title">
-              {mode === 'admin' ? 'Classes and seat counts' : 'Available classes'}
+              Admission classes
             </h2>
             <p>
               {mode === 'admin'
-                ? 'Counts come directly from the admission database.'
-                : 'Choose a class to hold one seat for ten minutes.'}
+                ? 'Live capacity and admission status for every class and shift.'
+                : 'Select a class and reserve one open seat for 10 minutes.'}
             </p>
           </div>
           <button
@@ -252,7 +238,7 @@ export function ClassCatalog({
             onClick={() => void loadClasses()}
             disabled={isLoading}
           >
-            {isLoading ? 'Refreshing…' : 'Refresh counts'}
+            {isLoading ? 'Refreshing…' : 'Refresh'}
           </button>
         </div>
 
@@ -274,55 +260,71 @@ export function ClassCatalog({
             <h3>No classes yet</h3>
             <p>
               {mode === 'admin'
-                ? 'Create the first class using the form above.'
-                : 'An administrator has not created a class yet.'}
+                ? 'Add the first admission class using the form.'
+                : 'No admission classes are open right now.'}
             </p>
           </div>
         ) : null}
 
         {classes.length > 0 ? (
-          <div className="class-card-grid">
+          <div className={`class-list ${mode}`} role="table" aria-label="Admission classes and seats">
+            <div className="class-list-header" role="row">
+              <span role="columnheader">Class &amp; shift</span>
+              <span role="columnheader">Capacity</span>
+              <span role="columnheader">Reserved</span>
+              <span role="columnheader">Admitted</span>
+              <span role="columnheader">Open seats</span>
+              {mode === 'student' ? <span role="columnheader">Action</span> : null}
+            </div>
             {classes.map((admissionClass) => {
               const isApplying = applyingClassId === admissionClass.id
               const hasApplied = appliedClassIds.has(admissionClass.id)
               const isFull = admissionClass.availableSeats === 0
 
               return (
-                <article className="class-card" key={admissionClass.id}>
-                  <div className="class-card-heading">
-                    <div>
-                      <span className="class-label">School class</span>
-                      <h3>{admissionClass.name}</h3>
-                    </div>
+                <div className="class-list-row" role="row" key={admissionClass.id}>
+                  <div className="class-title-cell" role="cell">
+                    <span className="mobile-column-label">Class &amp; shift</span>
+                    <strong>{admissionClass.name}</strong>
+                  </div>
+                  <div className="class-number-cell" role="cell">
+                    <span className="mobile-column-label">Capacity</span>
+                    <strong>{admissionClass.totalSeats}</strong>
+                  </div>
+                  <div className="class-number-cell" role="cell">
+                    <span className="mobile-column-label">Reserved</span>
+                    <strong>{admissionClass.heldSeats}</strong>
+                  </div>
+                  <div className="class-number-cell" role="cell">
+                    <span className="mobile-column-label">Admitted</span>
+                    <strong>{admissionClass.confirmedSeats}</strong>
+                  </div>
+                  <div className="class-number-cell open-seat-cell" role="cell">
+                    <span className="mobile-column-label">Open seats</span>
                     <span className={`availability-pill ${isFull ? 'full' : ''}`}>
-                      {isFull ? 'Full' : `${admissionClass.availableSeats} available`}
+                      {isFull ? 'Full' : `${admissionClass.availableSeats} open`}
                     </span>
                   </div>
 
-                  <div className="seat-metrics" aria-label={`${admissionClass.name} seat counts`}>
-                    <SeatMetric label="Total" value={admissionClass.totalSeats} />
-                    <SeatMetric label="Held" value={admissionClass.heldSeats} />
-                    <SeatMetric label="Confirmed" value={admissionClass.confirmedSeats} />
-                    <SeatMetric label="Available" value={admissionClass.availableSeats} />
-                  </div>
-
                   {mode === 'student' ? (
-                    <button
-                      className="apply-button"
-                      type="button"
-                      disabled={isFull || isApplying || hasApplied}
-                      onClick={() => void handleApply(admissionClass)}
-                    >
-                      {isApplying
-                        ? 'Holding seat…'
-                        : hasApplied
-                          ? 'Seat held'
-                          : isFull
-                            ? 'No seats available'
-                            : 'Apply and hold seat'}
-                    </button>
+                    <div className="class-action-cell" role="cell">
+                      <button
+                        className="apply-button"
+                        type="button"
+                        disabled={isFull || isApplying || hasApplied}
+                        onClick={() => void handleApply(admissionClass)}
+                      >
+                        {isApplying
+                          ? 'Reserving…'
+                          : hasApplied
+                            ? 'Reserved'
+                            : isFull
+                              ? 'Class full'
+                              : 'Reserve seat'}
+                      </button>
+                    </div>
                   ) : null}
-                </article>
+                </div>
               )
             })}
           </div>

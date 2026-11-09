@@ -42,9 +42,9 @@ export function canConfirmApplication(
 
 export function statusText(status: HoldStatus) {
   return {
-    HELD: 'Seat temporarily held',
-    CONFIRMED: 'Admission confirmed',
-    EXPIRED: 'Hold expired',
+    HELD: 'Seat reserved for fee payment',
+    CONFIRMED: 'Admission completed',
+    EXPIRED: 'Reservation expired',
     CANCELLED: 'Application cancelled',
   }[status]
 }

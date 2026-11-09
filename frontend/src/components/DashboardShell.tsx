@@ -33,7 +33,7 @@ export function DashboardShell({
               <strong>{studentId}</strong>
             </div>
             <button className="text-button" type="button" onClick={onChangeStudent}>
-              Change student
+              Logout
             </button>
           </div>
         </div>
@@ -42,11 +42,9 @@ export function DashboardShell({
       <main className="dashboard-main">
         <section className="dashboard-heading">
           <div>
-            <p className="eyebrow">Admission workspace</p>
-            <h1>Welcome to your portal</h1>
-            <p>Your registration number is saved on this device.</p>
+            <h1>Student admission dashboard</h1>
+            <p>Review classes, reserve a seat, and track your application.</p>
           </div>
-          <span className="foundation-badge">Applications open</span>
         </section>
 
         <ClassCatalog

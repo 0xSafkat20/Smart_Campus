@@ -16,11 +16,9 @@ export function AdminClassPage() {
       <main className="dashboard-main">
         <section className="dashboard-heading admin-heading">
           <div>
-            <p className="eyebrow">School administration</p>
-            <h1>Manage admission classes</h1>
-            <p>Create a class, set its capacity, and watch the live seat counts.</p>
+            <h1>Class &amp; seat management</h1>
+            <p>Create admission classes and monitor seat allocation.</p>
           </div>
-          <span className="foundation-badge">Admin workspace</span>
         </section>
 
         <ClassCatalog mode="admin" />
