@@ -355,6 +355,9 @@
 }
 
 .text-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px 12px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
@@ -363,6 +366,10 @@
   font-size: 0.78rem;
   font-weight: 750;
   cursor: pointer;
+}
+
+.nav-link {
+  text-decoration: none;
 }
 
 .dashboard-main {
@@ -397,6 +404,282 @@
   background: var(--color-success-bg);
   font-size: 0.76rem;
   font-weight: 800;
+}
+
+.class-workspace {
+  display: grid;
+  gap: 22px;
+}
+
+.class-workspace.admin {
+  grid-template-columns: minmax(280px, 0.72fr) minmax(0, 1.5fr);
+  align-items: start;
+}
+
+.class-admin-card,
+.class-list-section {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  box-shadow: var(--shadow-card);
+}
+
+.class-admin-card {
+  position: sticky;
+  top: 22px;
+  padding: 26px;
+}
+
+.class-list-section {
+  padding: 28px;
+}
+
+.section-heading {
+  display: flex;
+  margin-bottom: 24px;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.section-heading.compact {
+  margin-bottom: 22px;
+  align-items: flex-start;
+}
+
+.section-heading h2 {
+  margin: 6px 0 6px;
+  color: var(--color-text-strong);
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+  letter-spacing: -0.025em;
+}
+
+.section-heading p:not(.card-kicker) {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.section-step {
+  display: grid;
+  width: 31px;
+  height: 31px;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--color-brand-800);
+  background: var(--color-brand-100);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.class-form {
+  display: grid;
+  gap: 16px;
+}
+
+.class-form label {
+  display: grid;
+  gap: 7px;
+}
+
+.class-form label > span {
+  color: var(--color-text-strong);
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.class-form input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 13px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  outline: 0;
+  color: var(--color-text-strong);
+  background: var(--color-white);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.class-form input:focus {
+  border-color: var(--color-brand-600);
+  box-shadow: 0 0 0 4px rgb(21 107 115 / 11%);
+}
+
+.class-submit {
+  width: 100%;
+  margin-top: 2px;
+}
+
+.primary-button:disabled,
+.secondary-button:disabled,
+.apply-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+  transform: none;
+}
+
+.inline-error {
+  margin: 13px 0 0;
+  color: var(--color-danger);
+  font-size: 0.8rem;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.secondary-button,
+.apply-button {
+  min-height: 42px;
+  padding: 0 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.secondary-button {
+  flex: 0 0 auto;
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-brand-700);
+  background: var(--color-white);
+}
+
+.catalog-feedback:empty {
+  display: none;
+}
+
+.catalog-feedback {
+  display: grid;
+  margin-bottom: 18px;
+  gap: 10px;
+}
+
+.success-notice {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--color-success-border);
+  border-radius: var(--radius-md);
+  color: var(--color-success-text);
+  background: var(--color-success-bg);
+  font-size: 0.84rem;
+  font-weight: 650;
+}
+
+.catalog-empty {
+  padding: 44px 24px;
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+  text-align: center;
+  background: var(--color-surface-soft);
+}
+
+.catalog-empty h3 {
+  margin: 0 0 7px;
+  color: var(--color-text-strong);
+}
+
+.catalog-empty p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+}
+
+.class-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.class-card {
+  padding: 19px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+}
+
+.class-card-heading {
+  display: flex;
+  margin-bottom: 18px;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.class-label {
+  color: var(--color-text-subtle);
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.class-card h3 {
+  margin: 4px 0 0;
+  color: var(--color-text-strong);
+  font-size: 1.12rem;
+}
+
+.availability-pill {
+  flex: 0 0 auto;
+  padding: 5px 8px;
+  border-radius: 999px;
+  color: var(--color-success-text);
+  background: var(--color-success-bg);
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.availability-pill.full {
+  color: var(--color-danger);
+  background: #fff0f1;
+}
+
+.seat-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-bottom: 17px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+}
+
+.seat-metric {
+  min-width: 0;
+  padding: 10px 7px;
+  text-align: center;
+}
+
+.seat-metric + .seat-metric {
+  border-left: 1px solid var(--color-border);
+}
+
+.seat-metric span,
+.seat-metric strong {
+  display: block;
+}
+
+.seat-metric span {
+  overflow: hidden;
+  margin-bottom: 3px;
+  color: var(--color-text-subtle);
+  font-size: 0.63rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.seat-metric strong {
+  color: var(--color-text-strong);
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.apply-button {
+  width: 100%;
+  border: 1px solid var(--color-brand-900);
+  color: var(--color-white);
+  background: var(--color-brand-900);
 }
 
 .dashboard-grid {
@@ -592,6 +875,14 @@
     grid-template-columns: 1fr;
   }
 
+  .class-workspace.admin {
+    grid-template-columns: 1fr;
+  }
+
+  .class-admin-card {
+    position: static;
+  }
+
   .preview-card.wide {
     grid-row: auto;
   }
@@ -637,6 +928,29 @@
   .dashboard-heading {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .student-menu {
+    gap: 7px;
+  }
+
+  .student-menu .text-button {
+    padding: 7px 9px;
+    font-size: 0.72rem;
+  }
+
+  .class-list-section,
+  .class-admin-card {
+    padding: 20px;
+  }
+
+  .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .class-card-grid {
+    grid-template-columns: 1fr;
   }
 
   .preview-card {

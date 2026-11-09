@@ -9,7 +9,7 @@ import type {
   MyHoldResponse,
 } from './types'
 
-export function createSchoolAdmissionApi(studentId: string) {
+export function createSchoolAdmissionApi(studentId?: string) {
   return {
     getClasses() {
       return apiRequest<ClassSummary[]>('/classes', studentId)

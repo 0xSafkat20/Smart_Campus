@@ -1,6 +1,6 @@
 # School Admission System
 
-Incremental implementation of the take-home assignment. The runtime scaffold, database foundation, all eight required backend endpoints, and the editable React identity foundation are complete. Class and application workflows are the next implementation phase.
+Incremental implementation of the take-home assignment. The runtime scaffold, database foundation, all eight required backend endpoints, student identity flow, class administration, live seat listing, and Apply action are complete. The application lifecycle UI is the next implementation phase.
 
 Development progress and the required implementation order are tracked in [`PROJECT_PLAN.md`](PROJECT_PLAN.md).
 
@@ -24,7 +24,8 @@ docker compose up
 
 Then open:
 
-- Frontend: http://localhost:5173
+- Student portal: http://localhost:5173
+- Class administration: http://localhost:5173/admin
 - Backend health check: http://localhost:8080/health
 - Backend OpenAPI document in development: http://localhost:8080/openapi/v1.json
 
@@ -89,7 +90,15 @@ Entity Framework migrations are stored in `backend/src/SchoolAdmission.Api/Data/
 
 Seat creation is serialized by a PostgreSQL class-row lock. Concurrent requests therefore cannot make `heldSeats + confirmedSeats` exceed `totalSeats`, even when multiple backend processes share the database.
 
-The remaining required endpoints are tracked in `PROJECT_PLAN.md` and will be implemented milestone by milestone.
+## Implemented frontend workflow
+
+- `/admin` creates classes and shows live total, held, confirmed, and available seat counts.
+- The student portal validates and remembers the 17-digit registration number.
+- Students can view classes and use **Apply and hold seat** to create a ten-minute hold.
+- Seat counts refresh immediately after creating a class or holding a seat.
+- Loading, empty, success, full-class, validation, and server-error states are shown with friendly messages.
+
+Application status, countdown, confirmation, and cancellation remain in Milestone 7 and are tracked in `PROJECT_PLAN.md`.
 
 ## Frontend customization
 

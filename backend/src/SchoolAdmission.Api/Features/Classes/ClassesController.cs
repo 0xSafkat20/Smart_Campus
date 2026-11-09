@@ -53,10 +53,7 @@ public sealed class ClassesController(
     public async Task<ActionResult<IReadOnlyList<ClassResponse>>> GetAll(
         CancellationToken cancellationToken)
     {
-        var classes = await QueryClasses()
-            .OrderBy(admissionClass => admissionClass.CreatedAt)
-            .ThenBy(admissionClass => admissionClass.Name)
-            .ToListAsync(cancellationToken);
+        var classes = await QueryClasses().ToListAsync(cancellationToken);
 
         return Ok(classes.Select(ToResponse).ToList());
     }
@@ -87,6 +84,8 @@ public sealed class ClassesController(
         }
 
         return classes
+            .OrderBy(admissionClass => admissionClass.CreatedAt)
+            .ThenBy(admissionClass => admissionClass.Name)
             .Select(admissionClass => new ClassSeatSnapshot(
                 admissionClass.Id,
                 admissionClass.Name,

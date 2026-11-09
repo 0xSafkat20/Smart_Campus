@@ -13,12 +13,15 @@ export class ApiError extends Error {
 
 export async function apiRequest<T>(
   path: string,
-  studentId: string,
+  studentId: string | undefined,
   options: RequestInit = {},
 ): Promise<T> {
   const headers = new Headers(options.headers)
   headers.set('Accept', 'application/json')
-  headers.set('X-Student-Id', studentId)
+
+  if (studentId) {
+    headers.set('X-Student-Id', studentId)
+  }
 
   if (options.body && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json')

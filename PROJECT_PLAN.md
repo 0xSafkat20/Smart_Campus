@@ -66,16 +66,19 @@ Status: Complete
 
 ## Milestone 6 - Class administration and listing UI
 
-Status: Next
+Status: Complete
 
-- Add the class-creation form.
-- Show total, held, confirmed, and available seats.
-- Add the Apply button.
-- Refresh counts immediately after an action.
+- `/admin` provides the class-creation form without adding unrequested authentication.
+- Admin and student views show total, held, confirmed, and available seats.
+- The student portal can create a temporary seat hold with the Apply button.
+- Counts refresh immediately after class creation, Apply, or manual refresh.
+- Friendly loading, empty, success, full-class, and server-error states are included.
+- Docker integration verification proved that Apply changed held seats from 0 to 1 and available seats from 2 to 1.
+- A real-PostgreSQL regression test covers the class-list query used by the UI.
 
 ## Milestone 7 - Application UI
 
-Status: Not started
+Status: Next
 
 - Show the current application and all of the student's applications.
 - Show status and the live remaining-time countdown.

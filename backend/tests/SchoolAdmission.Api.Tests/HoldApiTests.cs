@@ -74,6 +74,30 @@ public sealed class HoldApiTests(PostgreSqlFixture database)
     }
 
     [Fact]
+    public async Task GetClasses_WithPostgreSql_ReturnsTranslatableSeatSummary()
+    {
+        await using var factory = await CreateFactory();
+        using var client = factory.CreateClient();
+        var admissionClass = await CreateClass(client, totalSeats: 2);
+
+        using var holdResponse = await SendHoldRequest(
+            client,
+            admissionClass.Id,
+            "20152691234567890");
+        Assert.Equal(HttpStatusCode.Created, holdResponse.StatusCode);
+
+        var classes = await client.GetFromJsonAsync<List<ClassResponse>>("/classes");
+        var classSummary = Assert.Single(
+            Assert.IsType<List<ClassResponse>>(classes),
+            item => item.Id == admissionClass.Id);
+
+        Assert.Equal(2, classSummary.TotalSeats);
+        Assert.Equal(1, classSummary.HeldSeats);
+        Assert.Equal(0, classSummary.ConfirmedSeats);
+        Assert.Equal(1, classSummary.AvailableSeats);
+    }
+
+    [Fact]
     public async Task ConcurrentHoldRequests_NeverExceedClassCapacity()
     {
         await using var factory = await CreateFactory();
