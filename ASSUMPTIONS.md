@@ -12,3 +12,4 @@ This file records choices that the assignment leaves open. Update it whenever a 
 - PostgreSQL will be the source of truth for capacity and concurrency. In-memory locks will not be relied upon, so a later multi-process backend remains possible.
 - Dates and expiration timestamps will be stored as UTC `timestamp with time zone` values in PostgreSQL.
 - Seat totals will be calculated from hold records instead of being stored as mutable counters. This avoids duplicated state that could drift out of sync.
+- Hold creation locks the selected class row inside a PostgreSQL transaction. This makes the capacity check and insert one serialized operation across backend processes.

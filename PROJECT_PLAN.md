@@ -33,18 +33,19 @@ Status: Complete
 
 ## Milestone 3 - Create a seat hold safely
 
-Status: Next
+Status: Complete
 
-- Read and validate the 17-digit `X-Student-Id` header.
-- Implement `POST /classes/{classId}/holds`.
-- Read `HOLD_DURATION_SECONDS`, defaulting to 600.
-- Return `409` when no seat is available.
-- Use a PostgreSQL transaction and class-row lock to prevent overselling.
-- Add a concurrent-request test.
+- The 17-digit `X-Student-Id` header is read and validated.
+- `POST /classes/{classId}/holds` returns the required `201` contract.
+- `HOLD_DURATION_SECONDS` is configurable and defaults to 600.
+- Full classes and duplicate active applications return `409`.
+- PostgreSQL transactions and class-row locks prevent overselling across processes.
+- Expired holds immediately stop consuming seats without a special expiry endpoint.
+- Real-PostgreSQL tests prove expiry behavior and that concurrent requests never exceed capacity.
 
 ## Milestone 4 - Hold lifecycle
 
-Status: Not started
+Status: Next
 
 - Implement `GET /holds/{holdId}`.
 - Implement `POST /holds/{holdId}/confirm` with ownership and idempotency.
