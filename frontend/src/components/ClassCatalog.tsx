@@ -5,15 +5,22 @@ import { createSchoolAdmissionApi } from '../api/schoolAdmissionApi'
 import type { ClassSummary } from '../api/types'
 import { RequestFeedback } from './RequestFeedback'
 
-type ClassCatalogProps =
-  | {
-      mode: 'admin'
-      studentId?: never
-    }
-  | {
-      mode: 'student'
-      studentId: string
-    }
+type SharedCatalogProps = {
+  syncVersion?: number
+  onApplicationChanged?: () => void
+}
+
+type ClassCatalogProps = SharedCatalogProps &
+  (
+    | {
+        mode: 'admin'
+        studentId?: never
+      }
+    | {
+        mode: 'student'
+        studentId: string
+      }
+  )
 
 function getErrorMessage(error: unknown) {
   return error instanceof ApiError
@@ -30,7 +37,12 @@ function SeatMetric({ label, value }: { label: string; value: number }) {
   )
 }
 
-export function ClassCatalog({ mode, studentId }: ClassCatalogProps) {
+export function ClassCatalog({
+  mode,
+  studentId,
+  syncVersion = 0,
+  onApplicationChanged,
+}: ClassCatalogProps) {
   const api = useMemo(
     () => createSchoolAdmissionApi(mode === 'student' ? studentId : undefined),
     [mode, studentId],
@@ -49,27 +61,56 @@ export function ClassCatalog({ mode, studentId }: ClassCatalogProps) {
   const [notice, setNotice] = useState<string | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
 
+  const readCatalog = useCallback(async () => {
+    const [nextClasses, applications] = await Promise.all([
+      api.getClasses(),
+      mode === 'student' ? api.getMyHolds() : Promise.resolve([]),
+    ])
+
+    return { nextClasses, applications }
+  }, [api, mode])
+
+  const applyCatalog = useCallback(
+    ({
+      nextClasses,
+      applications,
+    }: Awaited<ReturnType<typeof readCatalog>>) => {
+      setClasses(nextClasses)
+      setAppliedClassIds(
+        new Set(
+          applications
+            .filter(
+              (application) =>
+                application.status === 'HELD' ||
+                application.status === 'CONFIRMED',
+            )
+            .map((application) => application.classId),
+        ),
+      )
+    },
+    [],
+  )
+
   const loadClasses = useCallback(async () => {
     setIsLoading(true)
     setLoadError(null)
 
     try {
-      setClasses(await api.getClasses())
+      applyCatalog(await readCatalog())
     } catch (error) {
       setLoadError(getErrorMessage(error))
     } finally {
       setIsLoading(false)
     }
-  }, [api])
+  }, [applyCatalog, readCatalog])
 
   useEffect(() => {
     let isCurrent = true
 
-    void api
-      .getClasses()
-      .then((nextClasses) => {
+    void readCatalog()
+      .then((catalog) => {
         if (isCurrent) {
-          setClasses(nextClasses)
+          applyCatalog(catalog)
           setLoadError(null)
         }
       })
@@ -87,7 +128,7 @@ export function ClassCatalog({ mode, studentId }: ClassCatalogProps) {
     return () => {
       isCurrent = false
     }
-  }, [api])
+  }, [applyCatalog, readCatalog, syncVersion])
 
   async function handleCreateClass(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -137,6 +178,7 @@ export function ClassCatalog({ mode, studentId }: ClassCatalogProps) {
         ).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}.`,
       )
       await loadClasses()
+      onApplicationChanged?.()
     } catch (error) {
       setActionError(getErrorMessage(error))
     } finally {

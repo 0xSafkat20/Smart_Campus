@@ -78,17 +78,20 @@ Status: Complete
 
 ## Milestone 7 - Application UI
 
-Status: Next
+Status: Complete
 
-- Show the current application and all of the student's applications.
-- Show status and the live remaining-time countdown.
-- Add admission-fee confirmation and cancellation actions.
-- Change expired holds to `EXPIRED` without a page reload.
-- Disable confirmation after expiry.
+- The student portal shows a highlighted current application and the complete application history.
+- `HELD`, `CONFIRMED`, `EXPIRED`, and `CANCELLED` states have clear status labels.
+- A one-second live countdown shows the remaining hold time.
+- Students can confirm the admission fee or cancel an eligible application from the UI.
+- Expired holds change to `EXPIRED`, release their seats, and refresh counts without a page reload.
+- Confirmation is visibly disabled at `00:00` after expiry.
+- Active applications are restored from the backend after a browser reload and duplicate Apply actions are disabled.
+- Docker integration verified held, confirmed, cancelled, and expired application states.
 
 ## Milestone 8 - Full-system verification
 
-Status: Not started
+Status: Next
 
 - Verify every action can be completed through the UI.
 - Verify data survives backend and Docker restarts.

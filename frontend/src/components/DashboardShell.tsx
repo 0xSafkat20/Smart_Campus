@@ -1,3 +1,5 @@
+import { useCallback, useState } from 'react'
+import { ApplicationsPanel } from './ApplicationsPanel'
 import { Brand } from './Brand'
 import { ClassCatalog } from './ClassCatalog'
 
@@ -10,6 +12,12 @@ export function DashboardShell({
   studentId,
   onChangeStudent,
 }: DashboardShellProps) {
+  const [syncVersion, setSyncVersion] = useState(0)
+  const handleApplicationChanged = useCallback(
+    () => setSyncVersion((current) => current + 1),
+    [],
+  )
+
   return (
     <div className="dashboard-page">
       <header className="app-header">
@@ -41,7 +49,17 @@ export function DashboardShell({
           <span className="foundation-badge">Applications open</span>
         </section>
 
-        <ClassCatalog mode="student" studentId={studentId} />
+        <ClassCatalog
+          mode="student"
+          studentId={studentId}
+          syncVersion={syncVersion}
+          onApplicationChanged={handleApplicationChanged}
+        />
+        <ApplicationsPanel
+          studentId={studentId}
+          syncVersion={syncVersion}
+          onApplicationChanged={handleApplicationChanged}
+        />
       </main>
     </div>
   )

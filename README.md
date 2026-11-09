@@ -1,6 +1,6 @@
 # School Admission System
 
-Incremental implementation of the take-home assignment. The runtime scaffold, database foundation, all eight required backend endpoints, student identity flow, class administration, live seat listing, and Apply action are complete. The application lifecycle UI is the next implementation phase.
+Incremental implementation of the take-home assignment. The runtime scaffold, database foundation, all eight required backend endpoints, student identity flow, class administration, live seat listing, Apply action, countdown, confirmation, cancellation, and application history are complete. Full-system verification is the next milestone.
 
 Development progress and the required implementation order are tracked in [`PROJECT_PLAN.md`](PROJECT_PLAN.md).
 
@@ -96,9 +96,13 @@ Seat creation is serialized by a PostgreSQL class-row lock. Concurrent requests 
 - The student portal validates and remembers the 17-digit registration number.
 - Students can view classes and use **Apply and hold seat** to create a ten-minute hold.
 - Seat counts refresh immediately after creating a class or holding a seat.
+- **My applications** shows the current application and complete student history.
+- Held applications have a live one-second countdown and admission-fee confirmation action.
+- Eligible held or confirmed applications can be cancelled from the UI.
+- At `00:00`, the UI changes the hold to `EXPIRED`, refreshes seat counts, and disables confirmation without a page reload.
 - Loading, empty, success, full-class, validation, and server-error states are shown with friendly messages.
 
-Application status, countdown, confirmation, and cancellation remain in Milestone 7 and are tracked in `PROJECT_PLAN.md`.
+Persistence, restart behavior, complete browser-flow verification, and final requirement checks remain in Milestone 8 and are tracked in `PROJECT_PLAN.md`.
 
 ## Frontend customization
 
