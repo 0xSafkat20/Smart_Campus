@@ -11,6 +11,7 @@ var frontendOrigin = builder.Configuration["FRONTEND_ORIGIN"] ?? "http://localho
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddDbContext<AdmissionDbContext>(options =>
     options.UseNpgsql(connectionString));
 builder.Services.AddCors(options =>
