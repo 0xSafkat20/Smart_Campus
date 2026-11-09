@@ -91,17 +91,19 @@ Status: Complete
 
 ## Milestone 8 - Full-system verification
 
-Status: Next
+Status: Complete
 
-- Verify every action can be completed through the UI.
-- Verify data survives backend and Docker restarts.
-- Verify `docker compose up` is the only required startup command.
-- Verify friendly errors for full classes, expired holds, invalid input, and server failures.
-- Run backend, frontend, concurrency, and persistence tests.
+- Browser verification covers admin class creation, student identity, Apply, Confirm, Cancel, and application history.
+- Friendly UI errors are verified for invalid identity, last-seat conflicts, expired holds, and unavailable backend service.
+- A confirmed hold and its seat count survived `docker compose down` followed by `docker compose up -d` without volume deletion.
+- Student, admin, health, and database services all returned successfully after the one-command startup.
+- All 24 backend tests, including real-PostgreSQL concurrency tests, pass.
+- All 8 frontend rule/error tests, lint, and the production build pass.
+- Detailed evidence and rerun commands are recorded in `VERIFICATION.md`.
 
 ## Milestone 9 - Submission preparation
 
-Status: Not started
+Status: Next
 
 - Recheck every requirement against the assignment.
 - Complete README, `ASSUMPTIONS.md`, and `AI_USAGE.md`.

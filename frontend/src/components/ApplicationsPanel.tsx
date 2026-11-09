@@ -1,6 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ApiError } from '../api/client'
 import { createSchoolAdmissionApi } from '../api/schoolAdmissionApi'
+import {
+  canConfirmApplication,
+  effectiveStatus,
+  formatCountdown,
+  remainingSeconds,
+  statusText,
+} from '../applicationState'
 import type { HoldStatus, MyHoldResponse } from '../api/types'
 import { RequestFeedback } from './RequestFeedback'
 
@@ -14,42 +21,6 @@ function getErrorMessage(error: unknown) {
   return error instanceof ApiError
     ? error.message
     : 'Something went wrong. Please try again.'
-}
-
-function effectiveStatus(
-  application: MyHoldResponse,
-  now: number,
-): HoldStatus {
-  if (
-    application.status === 'HELD' &&
-    new Date(application.expiresAt).getTime() <= now
-  ) {
-    return 'EXPIRED'
-  }
-
-  return application.status
-}
-
-function remainingSeconds(application: MyHoldResponse, now: number) {
-  return Math.max(
-    0,
-    Math.ceil((new Date(application.expiresAt).getTime() - now) / 1000),
-  )
-}
-
-function formatCountdown(seconds: number) {
-  const minutes = Math.floor(seconds / 60)
-  const remaining = seconds % 60
-  return `${String(minutes).padStart(2, '0')}:${String(remaining).padStart(2, '0')}`
-}
-
-function statusText(status: HoldStatus) {
-  return {
-    HELD: 'Seat temporarily held',
-    CONFIRMED: 'Admission confirmed',
-    EXPIRED: 'Hold expired',
-    CANCELLED: 'Application cancelled',
-  }[status]
 }
 
 function ApplicationStatus({ status }: { status: HoldStatus }) {
@@ -195,8 +166,7 @@ export function ApplicationsPanel({
     : null
   const currentCanConfirm =
     currentApplication !== undefined &&
-    currentStatus === 'HELD' &&
-    remainingSeconds(currentApplication, now) > 0
+    canConfirmApplication(currentApplication, now)
   const currentCanCancel =
     currentStatus === 'HELD' || currentStatus === 'CONFIRMED'
 
@@ -305,7 +275,7 @@ export function ApplicationsPanel({
             const status = effectiveStatus(application, now)
             const isBusy = busyHoldId === application.holdId
             const canConfirm =
-              status === 'HELD' && remainingSeconds(application, now) > 0
+              canConfirmApplication(application, now)
             const canCancel = status === 'HELD' || status === 'CONFIRMED'
             const showConfirm = status === 'HELD' || status === 'EXPIRED'
 

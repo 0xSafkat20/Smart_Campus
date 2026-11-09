@@ -1,6 +1,6 @@
 # School Admission System
 
-Incremental implementation of the take-home assignment. The runtime scaffold, database foundation, all eight required backend endpoints, student identity flow, class administration, live seat listing, Apply action, countdown, confirmation, cancellation, and application history are complete. Full-system verification is the next milestone.
+Incremental implementation of the take-home assignment. The runtime scaffold, database foundation, all eight required backend endpoints, complete UI workflow, automated checks, browser verification, and restart persistence verification are complete. Submission preparation is the next milestone.
 
 Development progress and the required implementation order are tracked in [`PROJECT_PLAN.md`](PROJECT_PLAN.md).
 
@@ -60,6 +60,7 @@ Tests:
 
 ```text
 dotnet test backend/SchoolAdmission.slnx
+npm test --prefix frontend
 npm run lint --prefix frontend
 npm run build --prefix frontend
 ```
@@ -102,7 +103,7 @@ Seat creation is serialized by a PostgreSQL class-row lock. Concurrent requests 
 - At `00:00`, the UI changes the hold to `EXPIRED`, refreshes seat counts, and disables confirmation without a page reload.
 - Loading, empty, success, full-class, validation, and server-error states are shown with friendly messages.
 
-Persistence, restart behavior, complete browser-flow verification, and final requirement checks remain in Milestone 8 and are tracked in `PROJECT_PLAN.md`.
+The latest automated, browser, error-state, startup, and persistence results are recorded in [`VERIFICATION.md`](VERIFICATION.md). Final requirement and submission checks remain in Milestone 9 and are tracked in `PROJECT_PLAN.md`.
 
 ## Frontend customization
 
