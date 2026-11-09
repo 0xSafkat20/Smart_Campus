@@ -1,0 +1,14 @@
+# Assumptions
+
+This file records choices that the assignment leaves open. Update it whenever a new unspecified decision is made.
+
+- TypeScript is used instead of JavaScript so API request and response shapes can be checked during development.
+- Entity Framework Core with the Npgsql provider is the selected ORM because it supports PostgreSQL and database transactions cleanly.
+- The frontend runs at `http://localhost:5173`; the backend remains at the required `http://localhost:8080`.
+- Each class and shift combination will be stored as one class record, matching the assignment's instruction to treat shifts as separate classes.
+- Student identity will come only from the required 17-digit `X-Student-Id` header. No login or authentication system will be added.
+- Admission fee payment will be simulated as immediately successful. No real payment gateway will be added.
+- PostgreSQL IDs will use UUIDs. The example prefixes in the brief are illustrative and the brief allows another ID format.
+- PostgreSQL will be the source of truth for capacity and concurrency. In-memory locks will not be relied upon, so a later multi-process backend remains possible.
+- Dates and expiration timestamps will be stored as UTC `timestamp with time zone` values in PostgreSQL.
+- Seat totals will be calculated from hold records instead of being stored as mutable counters. This avoids duplicated state that could drift out of sync.
