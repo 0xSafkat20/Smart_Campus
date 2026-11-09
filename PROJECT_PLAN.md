@@ -23,17 +23,17 @@ Status: Complete
 
 ## Milestone 2 - Class API
 
-Status: Next
+Status: Complete
 
-- Implement `POST /classes`.
-- Implement `GET /classes`.
-- Implement `GET /classes/{classId}`.
-- Preserve the exact required response fields.
-- Add validation and automated tests.
+- `POST /classes` implemented with validation and a `201` response.
+- `GET /classes` implemented with total, held, confirmed, and available seat counts.
+- `GET /classes/{classId}` implemented with `404` for an unknown class.
+- The exact required response fields are preserved.
+- Automated tests cover creation, validation, counts, and missing classes.
 
 ## Milestone 3 - Create a seat hold safely
 
-Status: Not started
+Status: Next
 
 - Read and validate the 17-digit `X-Student-Id` header.
 - Implement `POST /classes/{classId}/holds`.

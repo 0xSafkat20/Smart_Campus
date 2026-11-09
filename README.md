@@ -1,6 +1,6 @@
 # School Admission System
 
-Incremental implementation of the take-home assignment. The runtime scaffold and database foundation are complete, but the required admission API and UI workflows are not implemented yet.
+Incremental implementation of the take-home assignment. The runtime scaffold, database foundation, and required class endpoints are complete. Seat-hold endpoints and UI workflows are not implemented yet.
 
 Development progress and the required implementation order are tracked in [`PROJECT_PLAN.md`](PROJECT_PLAN.md).
 
@@ -73,6 +73,14 @@ Copy `.env.example` to `.env` only when overriding the safe local defaults. Impo
 - `FRONTEND_ORIGIN`: allowed frontend origin for CORS.
 
 Entity Framework migrations are stored in `backend/src/SchoolAdmission.Api/Data/Migrations`. The backend applies pending migrations automatically when it starts outside the test environment.
+
+## Implemented API
+
+- `POST /classes` creates a class and returns `id`, `name`, and `totalSeats`.
+- `GET /classes` lists classes with `totalSeats`, `heldSeats`, `confirmedSeats`, and `availableSeats`.
+- `GET /classes/{classId}` returns the same seat summary for one class.
+
+The remaining required endpoints are tracked in `PROJECT_PLAN.md` and will be implemented milestone by milestone.
 
 To create a later migration after changing the model:
 
