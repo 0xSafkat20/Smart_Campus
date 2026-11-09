@@ -5,6 +5,8 @@
 - Also used for: designing the initial `classes` and `holds` persistence model, database constraints, and migration setup.
 - Also used for: implementing and testing the three fixed class endpoints.
 - Also used for: implementing concurrency-safe seat holding and a real-PostgreSQL concurrency test.
-- Not yet used for: implementing hold lookup, confirmation, cancellation, or the remaining fixed API endpoints.
+- Also used for: implementing and testing hold lookup, ownership-protected confirmation, cancellation, expiry, and the current student's application list.
+- Also used for: designing the responsive student identity experience, local persistence, typed API client, and reusable frontend feedback components.
+- Not yet used for: implementing the class listing and application-management React workflows.
 - Verification: every scaffold choice was checked against the assignment's required stack, URLs, Docker-only startup rule, folder names, environment variables, and submission files. Generated projects are also checked with build, lint, and Docker configuration commands.
 - Corrections: the default framework templates included sample weather and counter content; these were removed because they are unrelated to the assignment.

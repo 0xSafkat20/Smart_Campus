@@ -1,6 +1,6 @@
 # School Admission System
 
-Incremental implementation of the take-home assignment. The runtime scaffold, database foundation, class endpoints, and concurrency-safe seat holding are complete. Hold lifecycle endpoints and UI workflows are not implemented yet.
+Incremental implementation of the take-home assignment. The runtime scaffold, database foundation, all eight required backend endpoints, complete UI workflow, automated checks, browser verification, and restart persistence verification are complete. Submission preparation is the next milestone.
 
 Development progress and the required implementation order are tracked in [`PROJECT_PLAN.md`](PROJECT_PLAN.md).
 
@@ -24,7 +24,8 @@ docker compose up
 
 Then open:
 
-- Frontend: http://localhost:5173
+- Student portal: http://localhost:5173
+- Class administration: http://localhost:5173/admin
 - Backend health check: http://localhost:8080/health
 - Backend OpenAPI document in development: http://localhost:8080/openapi/v1.json
 
@@ -59,6 +60,7 @@ Tests:
 
 ```text
 dotnet test backend/SchoolAdmission.slnx
+npm test --prefix frontend
 npm run lint --prefix frontend
 npm run build --prefix frontend
 ```
@@ -82,10 +84,38 @@ Entity Framework migrations are stored in `backend/src/SchoolAdmission.Api/Data/
 - `GET /classes` lists classes with `totalSeats`, `heldSeats`, `confirmedSeats`, and `availableSeats`.
 - `GET /classes/{classId}` returns the same seat summary for one class.
 - `POST /classes/{classId}/holds` creates a temporary seat hold using the `X-Student-Id` header.
+- `GET /holds/{holdId}` returns the current hold status.
+- `POST /holds/{holdId}/confirm` confirms an owned, unexpired hold idempotently.
+- `DELETE /holds/{holdId}` cancels an owned application idempotently.
+- `GET /me/holds` lists the current student's applications and class names.
 
 Seat creation is serialized by a PostgreSQL class-row lock. Concurrent requests therefore cannot make `heldSeats + confirmedSeats` exceed `totalSeats`, even when multiple backend processes share the database.
 
-The remaining required endpoints are tracked in `PROJECT_PLAN.md` and will be implemented milestone by milestone.
+## Implemented frontend workflow
+
+- `/admin` creates classes and shows live total, held, confirmed, and available seat counts.
+- The student portal validates and remembers the 17-digit registration number.
+- Students can view classes and use **Apply and hold seat** to create a ten-minute hold.
+- Seat counts refresh immediately after creating a class or holding a seat.
+- **My applications** shows the current application and complete student history.
+- Held applications have a live one-second countdown and admission-fee confirmation action.
+- Eligible held or confirmed applications can be cancelled from the UI.
+- At `00:00`, the UI changes the hold to `EXPIRED`, refreshes seat counts, and disables confirmation without a page reload.
+- Loading, empty, success, full-class, validation, and server-error states are shown with friendly messages.
+
+The latest automated, browser, error-state, startup, and persistence results are recorded in [`VERIFICATION.md`](VERIFICATION.md). Final requirement and submission checks remain in Milestone 9 and are tracked in `PROJECT_PLAN.md`.
+
+## Frontend customization
+
+The interface intentionally uses plain React and CSS so it is easy to change:
+
+- Edit colors, borders, radii, and shadows in `frontend/src/index.css`.
+- Edit page layouts and responsive breakpoints in `frontend/src/App.css`.
+- Edit individual sections in `frontend/src/components`.
+- Edit API response shapes in `frontend/src/api/types.ts`.
+- Edit endpoint calls in `frontend/src/api/schoolAdmissionApi.ts`.
+
+The student registration number is stored only in browser local storage. Use the **Change student** button to clear it and return to the identity screen.
 
 To create a later migration after changing the model:
 

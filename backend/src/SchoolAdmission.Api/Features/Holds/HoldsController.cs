@@ -103,7 +103,7 @@ public sealed class HoldsController(
                 hold.Id,
                 hold.ClassId,
                 hold.StudentId,
-                "HELD",
+                HoldState.ToApiValue(hold.Status),
                 hold.ExpiresAt));
     }
 

@@ -45,57 +45,65 @@ Status: Complete
 
 ## Milestone 4 - Hold lifecycle
 
-Status: Next
+Status: Complete
 
-- Implement `GET /holds/{holdId}`.
-- Implement `POST /holds/{holdId}/confirm` with ownership and idempotency.
-- Implement `DELETE /holds/{holdId}`.
-- Implement `GET /me/holds`.
-- Expire unpaid holds automatically and release their seats.
-- Add backend tests for ownership, expiry, cancellation, and repeated confirmation.
+- `GET /holds/{holdId}` returns the current status and refreshes expiry.
+- `POST /holds/{holdId}/confirm` enforces ownership and is idempotent.
+- `DELETE /holds/{holdId}` cancels an owned application and is idempotent.
+- `GET /me/holds` returns only the current student's applications with class names.
+- Expired unpaid holds release seats and are persisted as `EXPIRED` when observed.
+- PostgreSQL-backed tests cover ownership, expiry, cancellation, and repeated confirmation.
 
 ## Milestone 5 - Frontend identity and API layer
 
-Status: Not started
+Status: Complete
 
-- Add the student registration-number input.
-- Validate exactly 17 digits.
-- Persist the selected student locally across refreshes.
-- Create a typed API client that sends `X-Student-Id`.
-- Add clear loading and error states.
+- The responsive student access screen validates exactly 17 digits.
+- The selected student persists locally across refreshes and can be changed.
+- A typed API client covers all eight fixed endpoints and sends `X-Student-Id`.
+- Reusable loading and error feedback components are ready for data screens.
+- Small React components and centralized CSS variables keep the design easy to change.
 
 ## Milestone 6 - Class administration and listing UI
 
-Status: Not started
+Status: Complete
 
-- Add the class-creation form.
-- Show total, held, confirmed, and available seats.
-- Add the Apply button.
-- Refresh counts immediately after an action.
+- `/admin` provides the class-creation form without adding unrequested authentication.
+- Admin and student views show total, held, confirmed, and available seats.
+- The student portal can create a temporary seat hold with the Apply button.
+- Counts refresh immediately after class creation, Apply, or manual refresh.
+- Friendly loading, empty, success, full-class, and server-error states are included.
+- Docker integration verification proved that Apply changed held seats from 0 to 1 and available seats from 2 to 1.
+- A real-PostgreSQL regression test covers the class-list query used by the UI.
 
 ## Milestone 7 - Application UI
 
-Status: Not started
+Status: Complete
 
-- Show the current application and all of the student's applications.
-- Show status and the live remaining-time countdown.
-- Add admission-fee confirmation and cancellation actions.
-- Change expired holds to `EXPIRED` without a page reload.
-- Disable confirmation after expiry.
+- The student portal shows a highlighted current application and the complete application history.
+- `HELD`, `CONFIRMED`, `EXPIRED`, and `CANCELLED` states have clear status labels.
+- A one-second live countdown shows the remaining hold time.
+- Students can confirm the admission fee or cancel an eligible application from the UI.
+- Expired holds change to `EXPIRED`, release their seats, and refresh counts without a page reload.
+- Confirmation is visibly disabled at `00:00` after expiry.
+- Active applications are restored from the backend after a browser reload and duplicate Apply actions are disabled.
+- Docker integration verified held, confirmed, cancelled, and expired application states.
 
 ## Milestone 8 - Full-system verification
 
-Status: Not started
+Status: Complete
 
-- Verify every action can be completed through the UI.
-- Verify data survives backend and Docker restarts.
-- Verify `docker compose up` is the only required startup command.
-- Verify friendly errors for full classes, expired holds, invalid input, and server failures.
-- Run backend, frontend, concurrency, and persistence tests.
+- Browser verification covers admin class creation, student identity, Apply, Confirm, Cancel, and application history.
+- Friendly UI errors are verified for invalid identity, last-seat conflicts, expired holds, and unavailable backend service.
+- A confirmed hold and its seat count survived `docker compose down` followed by `docker compose up -d` without volume deletion.
+- Student, admin, health, and database services all returned successfully after the one-command startup.
+- All 24 backend tests, including real-PostgreSQL concurrency tests, pass.
+- All 8 frontend rule/error tests, lint, and the production build pass.
+- Detailed evidence and rerun commands are recorded in `VERIFICATION.md`.
 
 ## Milestone 9 - Submission preparation
 
-Status: Not started
+Status: Next
 
 - Recheck every requirement against the assignment.
 - Complete README, `ASSUMPTIONS.md`, and `AI_USAGE.md`.
