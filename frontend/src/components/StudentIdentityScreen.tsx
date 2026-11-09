@@ -35,7 +35,6 @@ export function StudentIdentityScreen({
           <Brand />
 
           <div className="intro-copy">
-            <p className="eyebrow">Admission 2026</p>
             <h1>Your school journey starts here.</h1>
             <p>
               Review available classes, reserve a seat, and complete your
@@ -76,7 +75,6 @@ export function StudentIdentityScreen({
             <Brand compact />
           </div>
 
-          <p className="eyebrow">Student access</p>
           <h2 id="identity-title">Find your admission workspace</h2>
           <p className="form-description">
             Enter the 17-digit birth registration number used for this
