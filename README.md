@@ -1,6 +1,6 @@
 # School Admission System
 
-Incremental implementation of the take-home assignment. The runtime scaffold, database foundation, and all eight required backend endpoints are complete. The React UI workflows are the next implementation phase.
+Incremental implementation of the take-home assignment. The runtime scaffold, database foundation, all eight required backend endpoints, and the editable React identity foundation are complete. Class and application workflows are the next implementation phase.
 
 Development progress and the required implementation order are tracked in [`PROJECT_PLAN.md`](PROJECT_PLAN.md).
 
@@ -90,6 +90,18 @@ Entity Framework migrations are stored in `backend/src/SchoolAdmission.Api/Data/
 Seat creation is serialized by a PostgreSQL class-row lock. Concurrent requests therefore cannot make `heldSeats + confirmedSeats` exceed `totalSeats`, even when multiple backend processes share the database.
 
 The remaining required endpoints are tracked in `PROJECT_PLAN.md` and will be implemented milestone by milestone.
+
+## Frontend customization
+
+The interface intentionally uses plain React and CSS so it is easy to change:
+
+- Edit colors, borders, radii, and shadows in `frontend/src/index.css`.
+- Edit page layouts and responsive breakpoints in `frontend/src/App.css`.
+- Edit individual sections in `frontend/src/components`.
+- Edit API response shapes in `frontend/src/api/types.ts`.
+- Edit endpoint calls in `frontend/src/api/schoolAdmissionApi.ts`.
+
+The student registration number is stored only in browser local storage. Use the **Change student** button to clear it and return to the identity screen.
 
 To create a later migration after changing the model:
 

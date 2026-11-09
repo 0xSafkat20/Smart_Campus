@@ -56,18 +56,17 @@ Status: Complete
 
 ## Milestone 5 - Frontend identity and API layer
 
-Status: Next
+Status: Complete
 
-- Add the student registration-number input.
-- Validate exactly 17 digits.
-- Persist the selected student locally across refreshes.
-- Create a typed API client that sends `X-Student-Id`.
-- Add clear loading and error states.
-- Keep the design easy to change with small React components and centralized CSS variables.
+- The responsive student access screen validates exactly 17 digits.
+- The selected student persists locally across refreshes and can be changed.
+- A typed API client covers all eight fixed endpoints and sends `X-Student-Id`.
+- Reusable loading and error feedback components are ready for data screens.
+- Small React components and centralized CSS variables keep the design easy to change.
 
 ## Milestone 6 - Class administration and listing UI
 
-Status: Not started
+Status: Next
 
 - Add the class-creation form.
 - Show total, held, confirmed, and available seats.
