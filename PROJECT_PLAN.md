@@ -45,24 +45,25 @@ Status: Complete
 
 ## Milestone 4 - Hold lifecycle
 
-Status: Next
+Status: Complete
 
-- Implement `GET /holds/{holdId}`.
-- Implement `POST /holds/{holdId}/confirm` with ownership and idempotency.
-- Implement `DELETE /holds/{holdId}`.
-- Implement `GET /me/holds`.
-- Expire unpaid holds automatically and release their seats.
-- Add backend tests for ownership, expiry, cancellation, and repeated confirmation.
+- `GET /holds/{holdId}` returns the current status and refreshes expiry.
+- `POST /holds/{holdId}/confirm` enforces ownership and is idempotent.
+- `DELETE /holds/{holdId}` cancels an owned application and is idempotent.
+- `GET /me/holds` returns only the current student's applications with class names.
+- Expired unpaid holds release seats and are persisted as `EXPIRED` when observed.
+- PostgreSQL-backed tests cover ownership, expiry, cancellation, and repeated confirmation.
 
 ## Milestone 5 - Frontend identity and API layer
 
-Status: Not started
+Status: Next
 
 - Add the student registration-number input.
 - Validate exactly 17 digits.
 - Persist the selected student locally across refreshes.
 - Create a typed API client that sends `X-Student-Id`.
 - Add clear loading and error states.
+- Keep the design easy to change with small React components and centralized CSS variables.
 
 ## Milestone 6 - Class administration and listing UI
 

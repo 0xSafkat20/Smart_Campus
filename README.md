@@ -1,6 +1,6 @@
 # School Admission System
 
-Incremental implementation of the take-home assignment. The runtime scaffold, database foundation, class endpoints, and concurrency-safe seat holding are complete. Hold lifecycle endpoints and UI workflows are not implemented yet.
+Incremental implementation of the take-home assignment. The runtime scaffold, database foundation, and all eight required backend endpoints are complete. The React UI workflows are the next implementation phase.
 
 Development progress and the required implementation order are tracked in [`PROJECT_PLAN.md`](PROJECT_PLAN.md).
 
@@ -82,6 +82,10 @@ Entity Framework migrations are stored in `backend/src/SchoolAdmission.Api/Data/
 - `GET /classes` lists classes with `totalSeats`, `heldSeats`, `confirmedSeats`, and `availableSeats`.
 - `GET /classes/{classId}` returns the same seat summary for one class.
 - `POST /classes/{classId}/holds` creates a temporary seat hold using the `X-Student-Id` header.
+- `GET /holds/{holdId}` returns the current hold status.
+- `POST /holds/{holdId}/confirm` confirms an owned, unexpired hold idempotently.
+- `DELETE /holds/{holdId}` cancels an owned application idempotently.
+- `GET /me/holds` lists the current student's applications and class names.
 
 Seat creation is serialized by a PostgreSQL class-row lock. Concurrent requests therefore cannot make `heldSeats + confirmedSeats` exceed `totalSeats`, even when multiple backend processes share the database.
 
