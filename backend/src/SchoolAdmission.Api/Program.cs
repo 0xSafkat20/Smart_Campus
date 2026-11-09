@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolAdmission.Api.Data;
+using SchoolAdmission.Api.Features.Holds;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,10 +9,18 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
         "Set the ConnectionStrings__DefaultConnection environment variable.");
 
 var frontendOrigin = builder.Configuration["FRONTEND_ORIGIN"] ?? "http://localhost:5173";
+var holdDurationSeconds = builder.Configuration.GetValue<int?>("HOLD_DURATION_SECONDS")
+    ?? HoldOptions.DefaultDurationSeconds;
+
+if (holdDurationSeconds <= 0)
+{
+    throw new InvalidOperationException("HOLD_DURATION_SECONDS must be greater than zero.");
+}
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton(TimeProvider.System);
+builder.Services.AddSingleton(new HoldOptions(TimeSpan.FromSeconds(holdDurationSeconds)));
 builder.Services.AddDbContext<AdmissionDbContext>(options =>
     options.UseNpgsql(connectionString));
 builder.Services.AddCors(options =>

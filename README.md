@@ -1,6 +1,6 @@
 # School Admission System
 
-Incremental implementation of the take-home assignment. The runtime scaffold, database foundation, and required class endpoints are complete. Seat-hold endpoints and UI workflows are not implemented yet.
+Incremental implementation of the take-home assignment. The runtime scaffold, database foundation, class endpoints, and concurrency-safe seat holding are complete. Hold lifecycle endpoints and UI workflows are not implemented yet.
 
 Development progress and the required implementation order are tracked in [`PROJECT_PLAN.md`](PROJECT_PLAN.md).
 
@@ -63,6 +63,8 @@ npm run lint --prefix frontend
 npm run build --prefix frontend
 ```
 
+Docker must be running for backend tests because the required concurrency test starts a temporary real PostgreSQL container.
+
 ## Configuration
 
 Copy `.env.example` to `.env` only when overriding the safe local defaults. Important settings:
@@ -79,6 +81,9 @@ Entity Framework migrations are stored in `backend/src/SchoolAdmission.Api/Data/
 - `POST /classes` creates a class and returns `id`, `name`, and `totalSeats`.
 - `GET /classes` lists classes with `totalSeats`, `heldSeats`, `confirmedSeats`, and `availableSeats`.
 - `GET /classes/{classId}` returns the same seat summary for one class.
+- `POST /classes/{classId}/holds` creates a temporary seat hold using the `X-Student-Id` header.
+
+Seat creation is serialized by a PostgreSQL class-row lock. Concurrent requests therefore cannot make `heldSeats + confirmedSeats` exceed `totalSeats`, even when multiple backend processes share the database.
 
 The remaining required endpoints are tracked in `PROJECT_PLAN.md` and will be implemented milestone by milestone.
 
