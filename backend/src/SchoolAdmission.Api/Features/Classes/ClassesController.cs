@@ -68,20 +68,25 @@ public sealed class ClassesController(
         Guid classId,
         CancellationToken cancellationToken)
     {
-        var admissionClass = await QueryClasses()
-            .SingleOrDefaultAsync(item => item.Id == classId, cancellationToken);
+        var admissionClass = await QueryClasses(classId)
+            .SingleOrDefaultAsync(cancellationToken);
 
         return admissionClass is null
             ? NotFound()
             : Ok(ToResponse(admissionClass));
     }
 
-    private IQueryable<ClassSeatSnapshot> QueryClasses()
+    private IQueryable<ClassSeatSnapshot> QueryClasses(Guid? classId = null)
     {
         var now = timeProvider.GetUtcNow();
+        var classes = dbContext.Classes.AsNoTracking();
 
-        return dbContext.Classes
-            .AsNoTracking()
+        if (classId.HasValue)
+        {
+            classes = classes.Where(admissionClass => admissionClass.Id == classId.Value);
+        }
+
+        return classes
             .Select(admissionClass => new ClassSeatSnapshot(
                 admissionClass.Id,
                 admissionClass.Name,
