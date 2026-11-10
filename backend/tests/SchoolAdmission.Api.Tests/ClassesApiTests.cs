@@ -9,6 +9,23 @@ namespace SchoolAdmission.Api.Tests;
 
 public sealed class ClassesApiTests
 {
+    [Theory]
+    [InlineData("null")]
+    [InlineData("{}")]
+    [InlineData("{\"name\":null,\"totalSeats\":1}")]
+    [InlineData("{\"name\":\"Class\",\"totalSeats\":-1}")]
+    [InlineData("{\"name\":\"Class\",\"totalSeats\":1.5}")]
+    [InlineData("{\"name\":\"Class\",\"totalSeats\":2147483648}")]
+    [InlineData("{invalid")]
+    public async Task CreateClass_WithMalformedInput_ReturnsBadRequest(string json)
+    {
+        await using var factory = new TestApplicationFactory();
+        using var client = factory.CreateClient();
+        using var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+        using var response = await client.PostAsync("/classes", content);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
     [Fact]
     public async Task CreateClass_WithValidPayload_ReturnsRequiredContract()
     {

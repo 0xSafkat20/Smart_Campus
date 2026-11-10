@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using Npgsql;
 using SchoolAdmission.Api.Features.Classes;
 using SchoolAdmission.Api.Features.Holds;
 
@@ -8,6 +9,81 @@ namespace SchoolAdmission.Api.Tests;
 public sealed class HoldLifecycleApiTests(PostgreSqlFixture database)
     : IClassFixture<PostgreSqlFixture>
 {
+    [Fact]
+    public async Task Confirm_WhenLockWaitCrossesDeadline_ReturnsConflict()
+    {
+        var owner = Student(501);
+        var clock = NewTimeProvider();
+        await using var factory = await CreateFactory(clock);
+        using var client = factory.CreateClient();
+        var admissionClass = await CreateClass(client, "Contended expiry", 1);
+        var hold = await CreateHold(client, admissionClass.Id, owner);
+
+        await using var blocker = new NpgsqlConnection(database.ConnectionString);
+        await blocker.OpenAsync();
+        await using var transaction = await blocker.BeginTransactionAsync();
+        await using (var command = new NpgsqlCommand(
+            "SELECT id FROM holds WHERE id = @id FOR UPDATE", blocker, transaction))
+        {
+            command.Parameters.AddWithValue("id", hold.HoldId);
+            await command.ExecuteScalarAsync();
+        }
+
+        var pending = SendStudentRequest(client, HttpMethod.Post,
+            $"/holds/{hold.HoldId}/confirm", owner);
+        try
+        {
+            // Observe a real database lock wait instead of relying on a fixed delay.
+            await using var observer = new NpgsqlConnection(database.ConnectionString);
+            await observer.OpenAsync();
+            using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+            while (true)
+            {
+                await using var command = new NpgsqlCommand(
+                    "SELECT EXISTS (SELECT 1 FROM pg_stat_activity " +
+                    "WHERE datname = current_database() AND wait_event_type = 'Lock' " +
+                    "AND query LIKE '%holds%' AND pid <> pg_backend_pid())", observer);
+                if (await command.ExecuteScalarAsync(timeout.Token) is true)
+                    break;
+                await Task.Delay(20, timeout.Token);
+            }
+            clock.Advance(TimeSpan.FromSeconds(600));
+        }
+        finally
+        {
+            await transaction.RollbackAsync();
+        }
+
+        using var response = await pending;
+        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+        var state = await client.GetFromJsonAsync<HoldResponse>($"/holds/{hold.HoldId}");
+        Assert.Equal("EXPIRED", state!.Status);
+        var seats = await client.GetFromJsonAsync<ClassResponse>($"/classes/{admissionClass.Id}");
+        Assert.Equal(1, seats!.AvailableSeats);
+        Assert.Equal(0, seats.ConfirmedSeats);
+    }
+
+    [Fact]
+    public async Task CancelledAndExpiredApplications_AllowReapplication()
+    {
+        var owner = Student(601);
+        var clock = NewTimeProvider();
+        await using var factory = await CreateFactory(clock);
+        using var client = factory.CreateClient();
+        var admissionClass = await CreateClass(client, "Reapplication", 1);
+        var first = await CreateHold(client, admissionClass.Id, owner);
+        using var cancelled = await SendStudentRequest(client, HttpMethod.Delete,
+            $"/holds/{first.HoldId}", owner);
+        Assert.Equal(HttpStatusCode.NoContent, cancelled.StatusCode);
+        using var invalidConfirm = await SendStudentRequest(client, HttpMethod.Post,
+            $"/holds/{first.HoldId}/confirm", owner);
+        Assert.Equal(HttpStatusCode.Conflict, invalidConfirm.StatusCode);
+        var second = await CreateHold(client, admissionClass.Id, owner);
+        clock.Advance(TimeSpan.FromSeconds(600));
+        var third = await CreateHold(client, admissionClass.Id, owner);
+        Assert.NotEqual(second.HoldId, third.HoldId);
+    }
+
     [Fact]
     public async Task Confirm_IsOwnershipProtectedAndIdempotent()
     {

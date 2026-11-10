@@ -1,4 +1,6 @@
-# Verification Report
+# Smart Campus - Verification Report
+
+> Current review, 2026-11-10: the records below describe earlier verification. The latest lock-expiry correction and additional tests have not been runtime-verified. Frontend tests (8/8), production build, and Compose configuration validation passed in this review. Docker's engine is unavailable, local lint is blocked by Windows Application Control, and backend verification is incomplete. Use `SUBMISSION_AUDIT.md` as the current submission status.
 
 Full-system verification was completed on 2026-11-09 against the Docker Compose stack on the `test` branch. A page-by-page final requirement audit was completed on 2026-11-10. The final audit reran all 24 backend tests, all 8 frontend tests, frontend lint, the production build, Docker Compose validation, and a rendered-browser automatic-refresh check.
 
