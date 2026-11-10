@@ -22,6 +22,15 @@ Docker is the only prerequisite. The repository uses root-scoped build contexts 
 docker compose up --build -d
 ```
 
+If an older Docker Desktop installation on Windows still shows a Bake filesystem-permission message, run this PowerShell fallback in the same project folder:
+
+```powershell
+$env:COMPOSE_BAKE = "false"
+docker compose up --build -d
+```
+
+`COMPOSE_BAKE` is set only for the current PowerShell window. The repository is already compatible with standard Bake mode, so this fallback is normally not needed.
+
 Then open:
 
 - Student portal: http://localhost:5173
