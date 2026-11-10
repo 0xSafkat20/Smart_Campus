@@ -1,6 +1,6 @@
 # School Admission System
 
-Incremental implementation of the take-home assignment. The runtime scaffold, database foundation, all eight required backend endpoints, complete UI workflow, automated checks, browser verification, and restart persistence verification are complete. Final submission review is the remaining milestone.
+Completed incremental implementation of the take-home assignment. The runtime scaffold, database foundation, all eight required backend endpoints, complete UI workflow, automated checks, browser verification, restart persistence verification, final requirement audit, and submission preparation are complete.
 
 Development progress and the required implementation order are tracked in [`PROJECT_PLAN.md`](PROJECT_PLAN.md).
 
@@ -103,7 +103,7 @@ Seat creation is serialized by a PostgreSQL class-row lock. Concurrent requests 
 - At `00:00`, the UI changes the hold to `EXPIRED`, refreshes seat counts, and disables confirmation without a page reload.
 - Loading, empty, success, full-class, validation, and server-error states are shown with friendly messages.
 
-The latest automated, browser, error-state, startup, and persistence results are recorded in [`VERIFICATION.md`](VERIFICATION.md). Final requirement and submission checks remain in Milestone 9 and are tracked in `PROJECT_PLAN.md`.
+The latest automated, browser, error-state, startup, persistence, and final requirement-audit results are recorded in [`VERIFICATION.md`](VERIFICATION.md). Completed milestone evidence is tracked in [`PROJECT_PLAN.md`](PROJECT_PLAN.md).
 
 ## Frontend customization
 

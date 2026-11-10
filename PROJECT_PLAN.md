@@ -103,13 +103,14 @@ Status: Complete
 
 ## Milestone 9 - Submission preparation
 
-Status: In progress - documentation cleanup and final requirement audit complete; final commit and delivery remain.
+Status: Complete
 
 - [x] Recheck every requirement against all five pages of the assignment.
 - [x] Complete README, `ASSUMPTIONS.md`, `AI_USAGE.md`, and `VERIFICATION.md`.
 - [x] Review meaningful commit history.
 - [x] Confirm the confidential assignment PDF and local artifacts are not tracked.
 - [x] Run the complete backend/frontend checks and verify the required few-second seat refresh in a rendered browser.
-- [ ] Commit and push the final verified state to `test`.
-- [ ] Merge the verified state into `main` and push it before the deadline.
-- [ ] Make no commits or pushes after the deadline.
+- [x] Commit and push the final verified state to `test`.
+- [x] Merge the verified state into `main` and push it before the deadline.
+
+Delivery rule: make no commits or pushes after 11 November 2026 at 11:59:59 PM.

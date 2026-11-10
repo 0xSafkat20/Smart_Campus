@@ -31,11 +31,12 @@ The backend suite was also run in the official .NET Linux SDK container during t
 - The repository URL was reachable publicly with HTTP 200. The meaningful milestone history and the `test` and `main` branches were reviewed.
 - `.env`, the confidential assignment PDF, local output, temporary browser artifacts, and editor state are not tracked.
 
-## Remaining delivery action
+## Final delivery record
 
-- Commit the final documentation and automatic-refresh correction to `test`.
-- Push `test`, then merge the verified state into `main` and push `main` before 11 November 2026 at 11:59:59 PM.
-- Do not commit or push anything after the deadline.
+- The final requirement-alignment commit `6e6333d` was pushed to `test` on 2026-11-10.
+- The verified `test` state was merged without conflicts and pushed to the public `main` delivery branch in merge commit `1944fb2` on 2026-11-10.
+- The confidential assignment PDF remained untracked throughout delivery.
+- Do not commit or push anything after 11 November 2026 at 11:59:59 PM.
 
 ## Browser workflow
 
