@@ -21,6 +21,7 @@ services:
       ASPNETCORE_URLS: http://+:8080
       ConnectionStrings__DefaultConnection: ${DATABASE_CONNECTION_STRING:-Host=postgres;Port=5432;Database=school_admission;Username=postgres;Password=postgres}
       HOLD_DURATION_SECONDS: ${HOLD_DURATION_SECONDS:-600}
+      SEED_DEMO_DATA: ${SEED_DEMO_DATA:-true}
       FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:5173}
     depends_on:
       postgres:

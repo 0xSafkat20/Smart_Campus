@@ -48,8 +48,6 @@ public sealed class HoldLifecycleController(
             return InvalidStudentIdentity();
         }
 
-        var now = timeProvider.GetUtcNow();
-
         await using var transaction = await dbContext.Database.BeginTransactionAsync(
             IsolationLevel.ReadCommitted,
             cancellationToken);
@@ -59,6 +57,9 @@ public sealed class HoldLifecycleController(
         {
             return NotFound();
         }
+
+        // Check expiry after acquiring the lock, not when the request arrived.
+        var now = timeProvider.GetUtcNow();
 
         if (hold.Status == HoldStatus.Confirmed)
         {
@@ -105,8 +106,6 @@ public sealed class HoldLifecycleController(
             return InvalidStudentIdentity();
         }
 
-        var now = timeProvider.GetUtcNow();
-
         await using var transaction = await dbContext.Database.BeginTransactionAsync(
             IsolationLevel.ReadCommitted,
             cancellationToken);
@@ -116,6 +115,8 @@ public sealed class HoldLifecycleController(
         {
             return NotFound();
         }
+
+        var now = timeProvider.GetUtcNow();
 
         if (hold.Status == HoldStatus.Held && hold.ExpiresAt <= now)
         {

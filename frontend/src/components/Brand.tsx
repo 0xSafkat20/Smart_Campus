@@ -13,7 +13,7 @@ export function Brand({ compact = false }: BrandProps) {
         </svg>
       </span>
       <div>
-        <p className="brand-name">School Admission Portal</p>
+        <p className="brand-name">Smart Campus</p>
         <p className="brand-caption">Online admission services</p>
       </div>
     </div>

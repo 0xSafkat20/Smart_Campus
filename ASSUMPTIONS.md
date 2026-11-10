@@ -1,5 +1,8 @@
 # Assumptions
 
+- Smart Campus is the project name; the GitHub repository is `Smart_Campus`.
+- Docker demonstrations seed the brief's Morning Shift example and one extra Day Shift. All student identities are synthetic. Seeding adds only absent classes, never resets existing records, and can be disabled with `SEED_DEMO_DATA=false`. Seat counts remain computed from real hold records; demonstration holds expire normally.
+
 This file records choices that the assignment leaves open. Update it whenever a new unspecified decision is made.
 
 - TypeScript is used instead of JavaScript so API request and response shapes can be checked during development.

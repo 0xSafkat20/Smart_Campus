@@ -1,4 +1,6 @@
-# Project Milestones
+# Smart Campus - Project Milestones
+
+Current update: demo-data seeding, Smart Campus branding and submission audit are prepared. The historical completed milestones below predate these changes. Full runtime verification of the latest revision remains pending; see SUBMISSION_AUDIT.md.
 
 Work through this file from top to bottom. Complete, verify, and commit one milestone before starting the next one.
 

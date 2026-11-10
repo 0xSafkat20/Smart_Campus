@@ -29,8 +29,6 @@ public sealed class HoldsController(
                 $"The {StudentIdentity.HeaderName} header must contain exactly 17 digits.");
         }
 
-        var now = timeProvider.GetUtcNow();
-
         await using var transaction = await dbContext.Database.BeginTransactionAsync(
             IsolationLevel.ReadCommitted,
             cancellationToken);
@@ -44,6 +42,9 @@ public sealed class HoldsController(
         {
             return NotFound();
         }
+
+        // A contended lock may wait past a reservation deadline.
+        var now = timeProvider.GetUtcNow();
 
         await dbContext.Holds
             .Where(hold =>

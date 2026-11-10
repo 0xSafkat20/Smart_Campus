@@ -38,6 +38,11 @@ if (!app.Environment.IsEnvironment("Testing"))
     await using var scope = app.Services.CreateAsyncScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<AdmissionDbContext>();
     await dbContext.Database.MigrateAsync();
+    if (builder.Configuration.GetValue<bool>("SEED_DEMO_DATA"))
+    {
+        await DemoDataSeeder.SeedAsync(dbContext, TimeProvider.System,
+            TimeSpan.FromSeconds(holdDurationSeconds));
+    }
 }
 
 if (app.Environment.IsDevelopment())

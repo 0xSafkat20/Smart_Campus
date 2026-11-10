@@ -1,6 +1,10 @@
-# School Admission System
+# Smart Campus
 
-Completed incremental implementation of the take-home assignment. The runtime scaffold, database foundation, all eight required backend endpoints, complete UI workflow, automated checks, browser verification, restart persistence verification, final requirement audit, and submission preparation are complete.
+School admission management for students, guardians and school administrators.
+
+Repository: https://github.com/0xSafkat20/Smart_Campus
+
+School admission application with eight required API endpoints, a React admin/student workflow, and PostgreSQL persistence. See [`SUBMISSION_AUDIT.md`](SUBMISSION_AUDIT.md) for the current requirement checklist and verification limits. Historical test results do not certify the latest changes.
 
 Development progress and the required implementation order are tracked in [`PROJECT_PLAN.md`](PROJECT_PLAN.md).
 
@@ -37,7 +41,24 @@ docker compose down
 
 Do not add `-v` if you want to keep the database volume.
 
-## Local development
+## Demonstration data
+
+Docker Compose enables `SEED_DEMO_DATA=true`. After migrations, the backend adds the following sample classes and synthetic application records if those classes do not already exist:
+
+| Class | Total seats | Held seats | Confirmed seats | Available seats |
+|---|---:|---:|---:|---:|
+| Class 6 - Morning Shift | 120 | 15 | 80 | 25 |
+| Class 6 - Day Shift | 60 | 2 | 10 | 48 |
+
+The Morning Shift values reproduce the assignment's example. Day Shift values are additional demonstration data, not figures specified in the brief. Counts are calculated from actual application records, not hard-coded display values.
+
+These are the **initial** counts: held seats expire after `HOLD_DURATION_SECONDS` (600 seconds by default), so availability increases normally. Restarting never renews sample holds, duplicates applications, or overwrites existing classes. Classes with the same ID or name are left unchanged. Set `SEED_DEMO_DATA=false` before the first startup for an empty database; disabling it later does not delete existing data.
+
+For a quick demo, use synthetic student ID `90000000000000000` to see a held application before expiry, or `90000000000000015` to see a confirmed Morning Shift application. These IDs are fictional. Open `/admin` to view all counts, then use the student portal to reserve, confirm or cancel an application.
+
+The current machine's Docker engine was unavailable during this update, so the seeding implementation has not yet been exercised against PostgreSQL. It will run on the next successful Compose startup.
+
+## Local development commands
 
 Local tools are optional because Docker is the supported project entry point.
 
