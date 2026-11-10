@@ -1,6 +1,7 @@
 .env
 .idea/
 .vscode/
+.cursor/
 *.user
 *.suo
 
@@ -10,4 +11,5 @@ frontend/node_modules/
 frontend/dist/
 
 tmp/
+output/
 Asst_Software_Engineer_Project_Assignment*.pdf

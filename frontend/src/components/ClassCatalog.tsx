@@ -22,6 +22,8 @@ type ClassCatalogProps = SharedCatalogProps &
       }
   )
 
+const CATALOG_REFRESH_INTERVAL_MS = 5_000
+
 function getErrorMessage(error: unknown) {
   return error instanceof ApiError
     ? error.message
@@ -120,6 +122,30 @@ export function ClassCatalog({
       isCurrent = false
     }
   }, [applyCatalog, readCatalog, syncVersion])
+
+  useEffect(() => {
+    let isCurrent = true
+
+    const interval = window.setInterval(() => {
+      void readCatalog()
+        .then((catalog) => {
+          if (isCurrent) {
+            applyCatalog(catalog)
+            setLoadError(null)
+          }
+        })
+        .catch((error: unknown) => {
+          if (isCurrent) {
+            setLoadError(getErrorMessage(error))
+          }
+        })
+    }, CATALOG_REFRESH_INTERVAL_MS)
+
+    return () => {
+      isCurrent = false
+      window.clearInterval(interval)
+    }
+  }, [applyCatalog, readCatalog])
 
   async function handleCreateClass(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()

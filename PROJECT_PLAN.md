@@ -59,7 +59,7 @@ Status: Complete
 Status: Complete
 
 - The responsive student access screen validates exactly 17 digits.
-- The selected student persists locally across refreshes and can be changed.
+- The selected student persists locally across refreshes and can be cleared with Logout.
 - A typed API client covers all eight fixed endpoints and sends `X-Student-Id`.
 - Reusable loading and error feedback components are ready for data screens.
 - Small React components and centralized CSS variables keep the design easy to change.
@@ -70,8 +70,8 @@ Status: Complete
 
 - `/admin` provides the class-creation form without adding unrequested authentication.
 - Admin and student views show total, held, confirmed, and available seats.
-- The student portal can create a temporary seat hold with the Apply button.
-- Counts refresh immediately after class creation, Apply, or manual refresh.
+- The student portal can create a temporary seat hold with the Reserve seat button.
+- Counts refresh immediately after class creation or reservation and automatically every five seconds without a page reload.
 - Friendly loading, empty, success, full-class, and server-error states are included.
 - Docker integration verification proved that Apply changed held seats from 0 to 1 and available seats from 2 to 1.
 - A real-PostgreSQL regression test covers the class-list query used by the UI.
@@ -93,7 +93,7 @@ Status: Complete
 
 Status: Complete
 
-- Browser verification covers admin class creation, student identity, Apply, Confirm, Cancel, and application history.
+- Browser verification covers admin class creation, student identity, Reserve, Confirm, Cancel, and application history.
 - Friendly UI errors are verified for invalid identity, last-seat conflicts, expired holds, and unavailable backend service.
 - A confirmed hold and its seat count survived `docker compose down` followed by `docker compose up -d` without volume deletion.
 - Student, admin, health, and database services all returned successfully after the one-command startup.
@@ -103,11 +103,13 @@ Status: Complete
 
 ## Milestone 9 - Submission preparation
 
-Status: Next
+Status: In progress - documentation cleanup and final requirement audit complete; final commit and delivery remain.
 
-- Recheck every requirement against the assignment.
-- Complete README, `ASSUMPTIONS.md`, and `AI_USAGE.md`.
-- Review meaningful commit history.
-- Confirm the confidential assignment PDF is not tracked.
-- Push the final state to a public repository before the deadline.
-- Make no commits or pushes after the deadline.
+- [x] Recheck every requirement against all five pages of the assignment.
+- [x] Complete README, `ASSUMPTIONS.md`, `AI_USAGE.md`, and `VERIFICATION.md`.
+- [x] Review meaningful commit history.
+- [x] Confirm the confidential assignment PDF and local artifacts are not tracked.
+- [x] Run the complete backend/frontend checks and verify the required few-second seat refresh in a rendered browser.
+- [ ] Commit and push the final verified state to `test`.
+- [ ] Merge the verified state into `main` and push it before the deadline.
+- [ ] Make no commits or pushes after the deadline.
