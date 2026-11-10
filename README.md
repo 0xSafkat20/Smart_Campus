@@ -16,10 +16,10 @@ Development progress and the required implementation order are tracked in [`PROJ
 
 ## Run with Docker
 
-Docker is the only prerequisite.
+Docker is the only prerequisite. The repository uses root-scoped build contexts so a fresh clone or ZIP download works with Docker Compose's standard builder or Bake mode without extra filesystem-permission flags.
 
 ```text
-docker compose up
+docker compose up --build -d
 ```
 
 Then open:

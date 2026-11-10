@@ -1,0 +1,16 @@
+.git/
+.cursor/
+.env
+.idea/
+.vscode/
+tmp/
+output/
+Asst_Software_Engineer_Project_Assignment*.pdf
+
+**/bin/
+**/obj/
+**/node_modules/
+**/dist/
+**/*.user
+**/*.suo
+npm-debug.log*

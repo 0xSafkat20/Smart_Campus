@@ -1,10 +1,10 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
-COPY ["src/SchoolAdmission.Api/SchoolAdmission.Api.csproj", "src/SchoolAdmission.Api/"]
+COPY ["backend/src/SchoolAdmission.Api/SchoolAdmission.Api.csproj", "src/SchoolAdmission.Api/"]
 RUN dotnet restore "src/SchoolAdmission.Api/SchoolAdmission.Api.csproj"
 
-COPY . .
+COPY backend/ .
 RUN dotnet publish "src/SchoolAdmission.Api/SchoolAdmission.Api.csproj" \
     --configuration Release \
     --output /app/publish \

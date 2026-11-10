@@ -15,8 +15,8 @@ services:
 
   backend:
     build:
-      context: ./backend
-      dockerfile: src/SchoolAdmission.Api/Dockerfile
+      context: .
+      dockerfile: backend/src/SchoolAdmission.Api/Dockerfile
     environment:
       ASPNETCORE_URLS: http://+:8080
       ConnectionStrings__DefaultConnection: ${DATABASE_CONNECTION_STRING:-Host=postgres;Port=5432;Database=school_admission;Username=postgres;Password=postgres}
@@ -30,7 +30,8 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: .
+      dockerfile: frontend/Dockerfile
     environment:
       VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8080}
     depends_on:

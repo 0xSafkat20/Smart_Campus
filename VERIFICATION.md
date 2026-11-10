@@ -38,6 +38,13 @@ The backend suite was also run in the official .NET Linux SDK container during t
 - The confidential assignment PDF remained untracked throughout delivery.
 - Do not commit or push anything after 11 November 2026 at 11:59:59 PM.
 
+## Fresh-download Docker portability
+
+- Backend and frontend build contexts are repository-root scoped, with their Dockerfiles still stored inside the required `backend/` and `frontend/` folders.
+- A root `.dockerignore` keeps local, generated, confidential, and dependency files out of both build contexts.
+- This layout avoids Docker Bake filesystem-read entitlement prompts on a freshly downloaded Windows copy.
+- The standard first-run command `docker compose up --build -d` completed successfully in default Bake mode; no `COMPOSE_BAKE`, `--allow`, or machine-specific path setting is required.
+
 ## Browser workflow
 
 The following actions were executed through the rendered UI against the real backend and PostgreSQL database:
