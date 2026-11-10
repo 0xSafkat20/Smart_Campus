@@ -1,6 +1,6 @@
 # School Admission System
 
-Incremental implementation of the take-home assignment. The runtime scaffold, database foundation, all eight required backend endpoints, complete UI workflow, automated checks, browser verification, and restart persistence verification are complete. Submission preparation is the next milestone.
+Incremental implementation of the take-home assignment. The runtime scaffold, database foundation, all eight required backend endpoints, complete UI workflow, automated checks, browser verification, and restart persistence verification are complete. Final submission review is the remaining milestone.
 
 Development progress and the required implementation order are tracked in [`PROJECT_PLAN.md`](PROJECT_PLAN.md).
 
@@ -93,12 +93,12 @@ Seat creation is serialized by a PostgreSQL class-row lock. Concurrent requests 
 
 ## Implemented frontend workflow
 
-- `/admin` creates classes and shows live total, held, confirmed, and available seat counts.
+- `/admin` creates class-and-shift records and shows live capacity, reserved, admitted, and open-seat counts.
 - The student portal validates and remembers the 17-digit registration number.
-- Students can view classes and use **Apply and hold seat** to create a ten-minute hold.
-- Seat counts refresh immediately after creating a class or holding a seat.
-- **My applications** shows the current application and complete student history.
-- Held applications have a live one-second countdown and admission-fee confirmation action.
+- Students can view admission classes and use **Reserve seat** to create a ten-minute hold.
+- Seat counts refresh immediately after relevant actions and automatically every five seconds without reloading the page.
+- **Application status** shows the active reservation and complete application history.
+- Active reservations have a live one-second countdown and fee-confirmation action.
 - Eligible held or confirmed applications can be cancelled from the UI.
 - At `00:00`, the UI changes the hold to `EXPIRED`, refreshes seat counts, and disables confirmation without a page reload.
 - Loading, empty, success, full-class, validation, and server-error states are shown with friendly messages.
@@ -115,7 +115,7 @@ The interface intentionally uses plain React and CSS so it is easy to change:
 - Edit API response shapes in `frontend/src/api/types.ts`.
 - Edit endpoint calls in `frontend/src/api/schoolAdmissionApi.ts`.
 
-The student registration number is stored only in browser local storage. Use the **Change student** button to clear it and return to the identity screen.
+The student registration number is stored only in browser local storage. Use **Logout** to clear it and return to the identity screen. This is an identity reset, not an authentication system; the assignment does not request login or admin authentication.
 
 To create a later migration after changing the model:
 
